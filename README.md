@@ -3,33 +3,41 @@
 A single-file, self-hosted landing page (Linktree-style) for the school consulting
 deliverable **AI & Cloud-Powered Family Support Prototypes**.
 
-Hand-drawn "sketchnote" look: cream paper, marker headings, wobbly hand-drawn borders
-(pure SVG filters), a hatched progress bar, and drawn "Soon" pills.
+Ships with **6 switchable theme variants** so you can pick the look you like:
 
-The page is **`index.html`** plus an **`assets/`** folder with two paper-texture
-backgrounds. No build, no dependencies, no `node_modules`. The two handwriting fonts
-(**Gochi Hand** + **Kalam**) are embedded as base64. It works **offline / from `file://`**
-as long as `assets/` sits next to `index.html` (relative paths, no CDN, no external calls).
+1. **Daylight** — warm sunlit interior, light theme, serif, coral icon tiles
+2. **Sunset** — centered hero, 4 icon tiles in a row, mountain dusk
+3. **Clouds** — timeline list with dots + segmented progress, blue sky
+4. **Sketch** — hand-drawn cream paper, marker fonts, wobbly SVG-filter borders
+5. **Twilight** — minimal divider rows over a navy→sunset gradient
+6. **Night** — glassy dark cards over a cozy laptop-at-dusk photo
+
+Switch with the **1–6 pill at the bottom**, the arrow/number keys, or `index.html#v=3`
+in the URL. The chosen variant is remembered in the URL hash. To lock one as the default,
+set `setVariant(m ? +m[1] : 1, false)` at the end of the script to your number.
+
+The page is **`index.html`** plus an **`assets/`** folder of background images. No build,
+no dependencies, no `node_modules`. Fonts (**Playfair Display**, **Gochi Hand**, **Kalam**)
+are embedded as base64. It works **offline / from `file://`** as long as `assets/` sits
+next to `index.html` (relative paths, no CDN, no external calls).
 
 ## Backgrounds
 
-`assets/paper-mobile.jpg` (portrait) and `assets/paper-web.jpg` (landscape) are AI-generated
-cream-paper photos with faint pencil doodles in the margins and a clean center for text.
-CSS swaps them by width: mobile by default, `paper-web.jpg` at `min-width: 720px`. Drop in
-your own images with the same names to reskin, or edit the `body::before` rule.
+`assets/bg-1.jpg`…`bg-6.jpg` (variant 4 uses `paper-mobile.jpg` / `paper-web.jpg`) are
+AI-generated photos, each picked so the text area stays calm and readable. Each variant's
+`--bg`, text colors, fonts and card style live in its `[data-variant="N"]` block in the
+`<style>`. Drop in your own images with the same names to reskin.
 
 ## Edit content
 
 Open `index.html` and edit the `SITE` object near the bottom (inside `<script>`):
 
-- `title`, `subtitle`, `authors`, `eyebrow`, `footer` — text.
-- `accent` — one hex color drives the whole theme (star, byline dots, progress hatch, hovers).
+- `title`, `subtitle`, `authors`, `eyebrow`, `footer` — text (shared across all variants).
 - `progress` — `{ value: 0–100, label }`; the bar + number animate up on load.
 - `cards` — each `{ icon, label, note, href }`. Icons: `play`, `code`, `doc`, `video`, `link`.
 
-Fonts are set via the `--marker` (headings) and `--hand` (body) CSS variables in `:root`.
-The "hand-drawn" wobble lives in the `#rough` / `#rough2` / `#roughLite` SVG filters — bump
-their `scale` for messier lines, lower it for tidier ones.
+The accent color is `--accent` in `:root`. Variant 4's hand-drawn wobble lives in the
+`#rough` / `#rough2` / `#roughLite` SVG filters — bump their `scale` for messier lines.
 
 Replace the four `#TODO-*` hrefs with real URLs (live demo, GitHub repo, concept doc,
 video/slides). A card whose href is still a `#TODO` renders as a muted **"Soon"** pill
