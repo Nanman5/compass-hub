@@ -6,9 +6,17 @@ deliverable **AI & Cloud-Powered Family Support Prototypes**.
 Hand-drawn "sketchnote" look: cream paper, marker headings, wobbly hand-drawn borders
 (pure SVG filters), a hatched progress bar, and drawn "Soon" pills.
 
-Everything lives in **`index.html`** — no build, no dependencies, no `node_modules`. The
-two handwriting fonts (**Gochi Hand** + **Kalam**) are embedded as base64, so the page is
-fully self-contained and works **offline / from `file://`** with zero external requests.
+The page is **`index.html`** plus an **`assets/`** folder with two paper-texture
+backgrounds. No build, no dependencies, no `node_modules`. The two handwriting fonts
+(**Gochi Hand** + **Kalam**) are embedded as base64. It works **offline / from `file://`**
+as long as `assets/` sits next to `index.html` (relative paths, no CDN, no external calls).
+
+## Backgrounds
+
+`assets/paper-mobile.jpg` (portrait) and `assets/paper-web.jpg` (landscape) are AI-generated
+cream-paper photos with faint pencil doodles in the margins and a clean center for text.
+CSS swaps them by width: mobile by default, `paper-web.jpg` at `min-width: 720px`. Drop in
+your own images with the same names to reskin, or edit the `body::before` rule.
 
 ## Edit content
 
@@ -41,7 +49,7 @@ Same file, three ways:
   ```
 
 You can also just double-click `index.html` to open it from `file://` — it works offline
-(fonts are embedded; no CDN, no external requests).
+(fonts embedded; backgrounds load from the local `assets/` folder; no CDN).
 
 ## Optional later
 

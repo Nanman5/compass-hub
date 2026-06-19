@@ -47,25 +47,20 @@
     overflow-x: hidden;
   }
 
-  /* faint notebook dot-grid + warm paper grain */
+  /* real paper photo with margin doodles (mobile by default, web on wider screens) */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image: radial-gradient(circle, rgba(35, 32, 27, 0.10) 1px, transparent 1.6px);
-    background-size: 26px 26px;
-    opacity: 0.5;
+    background-image: url("assets/paper-mobile.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  @media (min-width: 720px) {
+    body::before { background-image: url("assets/paper-web.jpg"); }
   }
 
   main {
