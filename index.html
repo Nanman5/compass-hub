@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>AI &amp; Cloud-Powered Family Support Prototypes</title>
+<meta name="description" content="Consulting for Dr. Walker's Family Life Class — by Hernan L., Shondalle C. & Katlyn V. Live demo, source code, concept doc and presentation." />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="AI &amp; Cloud-Powered Family Support Prototypes" />
+<meta property="og:description" content="Consulting for Dr. Walker's Family Life Class — by Hernan L., Shondalle C. & Katlyn V." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AI &amp; Cloud-Powered Family Support Prototypes" />
+<meta name="twitter:description" content="Consulting for Dr. Walker's Family Life Class — by Hernan L., Shondalle C. & Katlyn V." />
+
+<!-- Inline SVG favicon (compass star), no external request -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23e8643c' d='M16 2l3.4 9.6L29 15l-9.6 3.4L16 28l-3.4-9.6L3 15l9.6-3.4z'/%3E%3C/svg%3E" />
+
+<style>
+  :root {
+    --bg: #0a0b10;
+    --text: #f4f1ea;
+    --muted: #9aa0ab;
+    --card: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.09);
+    --accent: #e8643c; /* overridden from SITE.accent at runtime */
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; }
+
+  body {
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Radial accent glow + faint grain, pure CSS, no images */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 36rem at 50% -8%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
+      radial-gradient(40rem 40rem at 110% 8%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
+    z-index: 0;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 56rem;
+    margin: 0 auto;
+    flex: 1;
+    padding: clamp(3.5rem, 9vh, 7rem) clamp(1.25rem, 5vw, 2.5rem) 2rem;
+  }
+
+  /* ---------- Hero ---------- */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+  }
+  .eyebrow .star { width: 0.85rem; height: 0.85rem; color: var(--accent); }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.3rem, 7vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    margin: 0 0 1rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-size: clamp(1.02rem, 2.4vw, 1.2rem);
+    color: var(--muted);
+    margin: 0 0 1.25rem;
+    max-width: 46ch;
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .byline .lead { color: var(--muted); }
+  .byline .name { position: relative; }
+  .byline .name:not(:last-child)::after {
+    content: "·";
+    color: var(--accent);
+    margin-left: 0.75rem;
+  }
+
+  /* ---------- Card grid ---------- */
+  .cards {
+    margin-top: clamp(2.5rem, 6vh, 3.75rem);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.4rem 1.5rem;
+    border-radius: 1rem;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--text);
+    text-decoration: none;
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+  }
+  .card:hover, .card:focus-visible {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 7%, var(--card));
+    box-shadow: 0 14px 40px -12px color-mix(in srgb, var(--accent) 40%, transparent);
+    outline: none;
+  }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .card .icon {
+    flex: none;
+    width: 2.6rem;
+    height: 2.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.7rem;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--accent);
+  }
+  .card .icon svg { width: 1.3rem; height: 1.3rem; }
+
+  .card .body { min-width: 0; }
+  .card .label {
+    font-family: var(--serif);
+    font-size: 1.18rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .card .note {
+    font-size: 0.86rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+
+  .card .arrow {
+    margin-left: auto;
+    flex: none;
+    color: var(--muted);
+    transition: transform 0.22s ease, color 0.22s ease;
+  }
+  .card:hover .arrow, .card:focus-visible .arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* "coming soon" state for unfilled #TODO links */
+  .card.soon { cursor: default; }
+  .card.soon:hover, .card.soon:focus-visible {
+    transform: none;
+    border-color: var(--card-border);
+    background: var(--card);
+    box-shadow: none;
+  }
+  .card.soon .pill {
+    margin-left: auto;
+    flex: none;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--card-border);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    padding: 2.5rem 1.25rem 2.25rem;
+  }
+
+  /* ---------- Entrance animation ---------- */
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  @media (max-width: 560px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; animation: none; }
+    .card, .card .arrow { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow reveal" style="animation-delay:0s">
+      <svg class="star" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 2l3.4 9.6L29 15l-9.6 3.4L16 28l-3.4-9.6L3 15l9.6-3.4z"/></svg>
+      <span id="eyebrow-text">Class consulting project</span>
+    </p>
+    <h1 class="reveal" id="title" style="animation-delay:0.06s"></h1>
+    <p class="subtitle reveal" id="subtitle" style="animation-delay:0.12s"></p>
+    <div class="byline reveal" id="byline" style="animation-delay:0.18s"></div>
+
+    <section class="cards" id="cards" aria-label="Project resources"></section>
+  </main>
+
+  <footer class="reveal" id="footer" style="animation-delay:0.4s"></footer>
+
+  <script>
+    /* ============================================================
+       EDIT EVERYTHING HERE. No build step — save and re-deploy.
+       Fill in the #TODO hrefs with real URLs.
+       ============================================================ */
+    const SITE = {
+      eyebrow: "Class consulting project",
+      title: "AI & Cloud-Powered Family Support Prototypes",
+      subtitle: "Consulting for Dr. Walker's Family Life Class.",
+      authors: ["Hernan L.", "Shondalle C.", "Katlyn V."],
+      accent: "#e8643c", // change the whole vibe in one line
+      footer: "Dr. Walker's Family Life Class · 2026",
+      cards: [
+        { icon: "play",  label: "Live Demo",       note: "Compass — the working prototype", href: "#TODO-demo-url" },
+        { icon: "code",  label: "GitHub Repo",      note: "Source code",                     href: "#TODO-repo-url" },
+        { icon: "doc",   label: "Concept Doc",      note: "Design spec & rationale",         href: "#TODO-doc-url" },
+        { icon: "video", label: "Video & Slides",   note: "Walkthrough & presentation",      href: "#TODO-video-url" },
+      ],
+    };
+
+    /* ---------- icons ---------- */
+    const ICONS = {
+      play: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 4l13 8-13 8z"/></svg>',
+      code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/></svg>',
+      doc:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>',
+      video:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="14" height="14" rx="2"/><path d="M22 8l-6 4 6 4z"/></svg>',
+      link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>',
+    };
+    const ARROW = '<svg class="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
+
+    /* ---------- render ---------- */
+    document.documentElement.style.setProperty("--accent", SITE.accent);
+    document.getElementById("eyebrow-text").textContent = SITE.eyebrow;
+    document.getElementById("title").textContent = SITE.title;
+    document.getElementById("subtitle").textContent = SITE.subtitle;
+    document.getElementById("footer").textContent = SITE.footer;
+
+    const byline = document.getElementById("byline");
+    const lead = document.createElement("span");
+    lead.className = "lead";
+    lead.textContent = "By";
+    byline.appendChild(lead);
+    SITE.authors.forEach((name) => {
+      const el = document.createElement("span");
+      el.className = "name";
+      el.textContent = name;
+      byline.appendChild(el);
+    });
+
+    const grid = document.getElementById("cards");
+    SITE.cards.forEach((card, i) => {
+      const pending = !card.href || card.href.startsWith("#TODO") || card.href === "#";
+      const a = document.createElement("a");
+      a.className = "card reveal" + (pending ? " soon" : "");
+      a.style.animationDelay = 0.22 + i * 0.07 + "s";
+      if (pending) {
+        a.setAttribute("aria-disabled", "true");
+        a.addEventListener("click", (e) => e.preventDefault());
+      } else {
+        a.href = card.href;
+        if (/^https?:/.test(card.href)) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+      }
+      a.innerHTML =
+        '<span class="icon">' + (ICONS[card.icon] || ICONS.link) + "</span>" +
+        '<span class="body"><span class="label"></span><span class="note"></span></span>' +
+        (pending ? '<span class="pill">Soon</span>' : ARROW);
+      a.querySelector(".label").textContent = card.label;
+      a.querySelector(".note").textContent = card.note;
+      grid.appendChild(a);
+    });
+  </script>
+</body>
+</html>
