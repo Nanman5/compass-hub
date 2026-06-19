@@ -125,6 +125,45 @@
     margin-left: 0.75rem;
   }
 
+  /* ---------- Progress ---------- */
+  .progress {
+    margin-top: 2.1rem;
+    max-width: 30rem;
+  }
+  .progress .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.55rem;
+  }
+  .progress .plabel {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .progress .pval {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .progress .track {
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+  .progress .fill {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 55%, #fff), var(--accent));
+    box-shadow: 0 0 16px -2px color-mix(in srgb, var(--accent) 70%, transparent);
+    transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* ---------- Card grid ---------- */
   .cards {
     margin-top: clamp(2.5rem, 6vh, 3.75rem);
@@ -171,15 +210,17 @@
 
   .card .body { min-width: 0; }
   .card .label {
+    display: block;
     font-family: var(--serif);
     font-size: 1.18rem;
     font-weight: 600;
     letter-spacing: -0.01em;
   }
   .card .note {
+    display: block;
     font-size: 0.86rem;
     color: var(--muted);
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
   }
 
   .card .arrow {
@@ -232,7 +273,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; animation: none; }
-    .card, .card .arrow { transition: none; }
+    .card, .card .arrow, .progress .fill { transition: none; }
   }
 </style>
 </head>
@@ -245,6 +286,16 @@
     <h1 class="reveal" id="title" style="animation-delay:0.06s"></h1>
     <p class="subtitle reveal" id="subtitle" style="animation-delay:0.12s"></p>
     <div class="byline reveal" id="byline" style="animation-delay:0.18s"></div>
+
+    <div class="progress reveal" id="progress" style="animation-delay:0.24s" role="group" aria-label="Project progress">
+      <div class="row">
+        <span class="plabel" id="plabel">Project progress</span>
+        <span class="pval" id="pval" aria-live="polite">0%</span>
+      </div>
+      <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="ptrack">
+        <div class="fill" id="pfill"></div>
+      </div>
+    </div>
 
     <section class="cards" id="cards" aria-label="Project resources"></section>
   </main>
@@ -262,6 +313,7 @@
       subtitle: "Consulting for Dr. Walker's Family Life Class.",
       authors: ["Hernan L.", "Shondalle C.", "Katlyn V."],
       accent: "#e8643c", // change the whole vibe in one line
+      progress: { value: 64, label: "Project progress" }, // 0–100, animates on load
       footer: "Dr. Walker's Family Life Class · 2026",
       cards: [
         { icon: "play",  label: "Live Demo",       note: "Compass — the working prototype", href: "#TODO-demo-url" },
@@ -300,12 +352,41 @@
       byline.appendChild(el);
     });
 
+    /* ---------- progress bar ---------- */
+    const prog = SITE.progress;
+    const progEl = document.getElementById("progress");
+    if (prog && typeof prog.value === "number") {
+      const target = Math.max(0, Math.min(100, prog.value));
+      const fill = document.getElementById("pfill");
+      const valEl = document.getElementById("pval");
+      const track = document.getElementById("ptrack");
+      document.getElementById("plabel").textContent = prog.label || "Project progress";
+      track.setAttribute("aria-valuenow", String(target));
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        fill.style.width = target + "%";
+        valEl.textContent = target + "%";
+      } else {
+        requestAnimationFrame(() => { fill.style.width = target + "%"; });
+        const dur = 1400, t0 = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - t0) / dur);
+          const eased = 1 - Math.pow(1 - t, 3);
+          valEl.textContent = Math.round(eased * target) + "%";
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }
+    } else if (progEl) {
+      progEl.remove();
+    }
+
     const grid = document.getElementById("cards");
     SITE.cards.forEach((card, i) => {
       const pending = !card.href || card.href.startsWith("#TODO") || card.href === "#";
       const a = document.createElement("a");
       a.className = "card reveal" + (pending ? " soon" : "");
-      a.style.animationDelay = 0.22 + i * 0.07 + "s";
+      a.style.animationDelay = 0.32 + i * 0.07 + "s";
       if (pending) {
         a.setAttribute("aria-disabled", "true");
         a.addEventListener("click", (e) => e.preventDefault());
