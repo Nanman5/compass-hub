@@ -25,11 +25,12 @@ Open `index.html` and edit the `SITE` object near the bottom (inside `<script>`)
 
 - `title`, `subtitle`, `authors`, `eyebrow`, `footer` — text.
 - `progress` — `{ value: 0–100, label }`; the bar + number animate up on load.
+- `todo` — `{ label, items: [...] }`; a hand-drawn "Still to do" checklist of remaining work.
 - `cards` — each `{ icon, label, note, href }`. Icons: `play`, `code`, `doc`, `video`, `link`.
 
 Cards whose `href` still starts with `#TODO` render a muted **"Soon"** pill instead of a dead
-link. Currently live: **Concept Doc** → `assets/concept-brief.pdf`. Still to fill in:
-**Live Demo**, **GitHub Repo**, **Video & Slides**.
+link. Currently live: **Live Demo**, **GitHub Repo** and **Concept Doc**. Still to fill in:
+**Video & Slides**.
 
 The accent color is `--accent` in `:root`. The hand-drawn wobble lives in the
 `#rough` / `#rough2` / `#roughLite` SVG filters — bump their `scale` for messier lines.

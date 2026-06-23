@@ -88,6 +88,14 @@
   .fill { position: absolute; top: 4px; bottom: 4px; left: 4px; width: 0; border-radius: 6px; background: repeating-linear-gradient(135deg, var(--accent) 0 3px, transparent 3px 7px); filter: url(#rough2); transition: width 1.5s cubic-bezier(0.22,1,0.36,1); }
   .pval { font-family: var(--marker); font-size: clamp(1.7rem, 7vw, 2.3rem); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
 
+  /* ---------- Still to do ---------- */
+  .todo { margin-top: 1.7rem; }
+  .todo .thead { font-family: var(--marker); font-size: clamp(1.25rem, 5vw, 1.5rem); line-height: 1.05; color: var(--ink); margin-bottom: 0.75rem; }
+  .todo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.65rem; }
+  .todo li { position: relative; display: flex; align-items: flex-start; gap: 0.75rem; font-family: var(--hand); font-size: 1.05rem; line-height: 1.35; color: var(--ink-soft); }
+  .todo .box { position: relative; flex: none; width: 1.25rem; height: 1.25rem; margin-top: 0.12rem; }
+  .todo .box::before { content: ""; position: absolute; inset: 0; border: 2.5px solid var(--ink); border-radius: 5px; filter: url(#roughLite); }
+
   /* ---------- Cards ---------- */
   .cards { margin-top: 1.7rem; display: grid; grid-template-columns: 1fr; gap: 0.95rem; }
   .card {
@@ -146,6 +154,8 @@
       </div>
     </div>
 
+    <section class="todo reveal" id="todo" style="animation-delay:0.3s" aria-label="What's left to work on"></section>
+
     <section class="cards" id="cards" aria-label="Project resources"></section>
   </main>
 
@@ -161,7 +171,16 @@
       title: "AI & Cloud-Powered Family Support Prototypes",
       subtitle: "Consulting for Dr. Walker's Family Life Class.",
       authors: ["Hernan L.", "Shondalle C.", "Katlyn V."],
-      progress: { value: 45, label: "Project progress" },
+      progress: { value: 85, label: "Project progress" },
+      todo: {
+        label: "Still to do",
+        items: [
+          "Record the walkthrough video & finish the slide deck",
+          "End-to-end QA of the live voice, coach & paste flows",
+          "Confirm the production deploy matches the latest build",
+          "Rehearse the in-class demo run-through",
+        ],
+      },
       footer: "Dr. Walker's Family Life Class · 2026",
       cards: [
         { icon: "play",  label: "Live Demo",      note: "Compass — the working prototype", href: "https://compass-544537517865.us-central1.run.app" },
@@ -202,6 +221,20 @@
         const tick = (now) => { const t = Math.min(1, (now - t0) / dur); valEl.textContent = Math.round((1 - Math.pow(1 - t, 3)) * target) + "%"; if (t < 1) requestAnimationFrame(tick); };
         requestAnimationFrame(tick);
       }
+    }
+
+    const todo = SITE.todo;
+    if (todo && Array.isArray(todo.items) && todo.items.length) {
+      const sec = document.getElementById("todo");
+      const head = document.createElement("div"); head.className = "thead"; head.textContent = todo.label || "Still to do"; sec.appendChild(head);
+      const ul = document.createElement("ul");
+      todo.items.forEach((text) => {
+        const li = document.createElement("li");
+        const box = document.createElement("span"); box.className = "box"; box.setAttribute("aria-hidden", "true");
+        const span = document.createElement("span"); span.textContent = text;
+        li.appendChild(box); li.appendChild(span); ul.appendChild(li);
+      });
+      sec.appendChild(ul);
     }
 
     const grid = document.getElementById("cards");
