@@ -97,6 +97,14 @@
   .todo .box::before { content: ""; position: absolute; inset: 0; border: 2.5px solid var(--ink); border-radius: 5px; filter: url(#roughLite); }
 
   /* ---------- Cards ---------- */
+  .videos { margin-top: 1.9rem; }
+  .videos .vhead { font-family: var(--marker); font-size: clamp(1.25rem, 5vw, 1.5rem); line-height: 1.05; color: var(--ink); margin-bottom: 0.9rem; }
+  .vgrid { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+  @media (min-width: 620px) { .vgrid { grid-template-columns: 1fr 1fr; } }
+  .vfig { position: relative; margin: 0; padding: 0.5rem; background: #fffdf8; border-radius: 18px; }
+  .vfig::before { content: ""; position: absolute; inset: 0; border: 2.5px solid var(--ink); border-radius: 18px; filter: url(#rough); pointer-events: none; }
+  .vfig video { display: block; width: 100%; border-radius: 12px; background: #000; }
+  .vfig figcaption { font-family: var(--hand); font-size: 1rem; color: var(--ink-soft); padding: 0.55rem 0.4rem 0.15rem; }
   .cards { margin-top: 1.7rem; display: grid; grid-template-columns: 1fr; gap: 0.95rem; }
   .card {
     position: relative; display: flex; align-items: center; gap: 1rem;
@@ -157,6 +165,24 @@
     <section class="todo reveal" id="todo" style="animation-delay:0.3s" aria-label="What's left to work on"></section>
 
     <section class="cards" id="cards" aria-label="Project resources"></section>
+
+    <section class="videos reveal" id="videos" style="animation-delay:0.44s" aria-label="Walkthrough videos">
+      <h2 class="vhead">Watch it in action</h2>
+      <div class="vgrid">
+        <figure class="vfig">
+          <video controls preload="metadata" playsinline>
+            <source src="assets/demo.mp4" type="video/mp4" />
+          </video>
+          <figcaption>Product walkthrough — Compass, end to end.</figcaption>
+        </figure>
+        <figure class="vfig">
+          <video controls preload="metadata" playsinline>
+            <source src="assets/visuals.mp4" type="video/mp4" />
+          </video>
+          <figcaption>The pitch — what Compass is, in a glance.</figcaption>
+        </figure>
+      </div>
+    </section>
   </main>
 
   <footer class="reveal" id="footer" style="animation-delay:0.5s"></footer>
@@ -171,12 +197,10 @@
       title: "AI & Cloud-Powered Family Support Prototypes",
       subtitle: "Consulting for Dr. Walker's Family Life Class.",
       authors: ["Hernan L.", "Shondalle C.", "Katlyn V."],
-      progress: { value: 90, label: "Project progress" },
+      progress: { value: 100, label: "Project progress" },
       todo: {
         label: "Still to do",
         items: [
-          "Record the walkthrough video & slides",
-          "Final end-to-end QA of the live voice, coach & paste flows",
           "Keep growing the curated evidence base",
         ],
       },
@@ -185,7 +209,7 @@
         { icon: "play",  label: "Live Demo",      note: "Compass — the working prototype", href: "https://compass-544537517865.us-central1.run.app" },
         { icon: "code",  label: "GitHub Repo",    note: "Source code",                     href: "https://github.com/Nanman5/compass" },
         { icon: "doc",   label: "Concept Doc",    note: "Design spec & rationale",         href: "assets/concept-brief.pdf" },
-        { icon: "video", label: "Video & Slides", note: "Walkthrough & presentation",      href: "#TODO-video-url" },
+        { icon: "video", label: "Video & Slides", note: "Walkthrough & presentation",      href: "#videos" },
       ],
     };
 
